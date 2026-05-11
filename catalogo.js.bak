@@ -124,22 +124,7 @@ const CATALOG = [
     sold: false,
   },
 
-
-  {
-    id: 8,
-    name: "Camicia a quadri",
-    category: "Altro",
-    size: "S",
-    price: 15.9,
-    condition: "Come nuovo",
-    image: "assets/catalog/8/CF1930UO_Q609_001.jpg",
-    description: "Descrizione di test",
-    brand: "Nessuno",
-    color: "Quadri e fiori",
-    new: false,
-    sold: false,
-  },
-    // ═══════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════
   //  👆 AGGIUNGI I TUOI ARTICOLI QUI SOTTO, copia il blocco:
   // ═══════════════════════════════════════════════════════════
 
