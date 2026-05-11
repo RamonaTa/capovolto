@@ -1,0 +1,1930 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Capovolto</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --coral: #ac332a;
+        --coral-light: #ff6f61;
+        --coral-pale: #ffdad5;
+        --yellow: #fdd34d;
+        --yellow-dark: #735c00;
+        --teal: #006a62;
+        --teal-light: #33aea2;
+        --surface: #f9f7f5;
+        --surface-card: #ffffff;
+        --surface-low: #f3f0ed;
+        --text: #1a1c1c;
+        --text-muted: #6b5652;
+        --outline: #e0d5d2;
+        --shadow-sm: 0 2px 12px rgba(172, 51, 42, 0.06);
+        --shadow-md: 0 8px 32px rgba(172, 51, 42, 0.1);
+        --shadow-lg: 0 20px 60px rgba(172, 51, 42, 0.12);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --radius-full: 9999px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--surface);
+        color: var(--text);
+        overflow-x: hidden;
+        min-height: 100dvh;
+      }
+
+      /* ─── SCROLLBAR ─── */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--coral-pale);
+        border-radius: 99px;
+      }
+
+      /* ─── PAGES ─── */
+      .page {
+        display: none;
+        animation: fadeIn 0.35s ease;
+      }
+      .page.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ─── TOP BAR ─── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(249, 247, 245, 0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--outline);
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+      .logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--coral);
+        letter-spacing: -0.01em;
+        cursor: pointer;
+      }
+      .logo span {
+        font-style: italic;
+      }
+      .header-actions {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--coral);
+        font-size: 1.3rem;
+        transition: background 0.2s;
+      }
+      .icon-btn:hover {
+        background: var(--coral-pale);
+      }
+      .icon-btn svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      /* ─── BOTTOM NAV ─── */
+      nav.bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(249, 247, 245, 0.95);
+        backdrop-filter: blur(16px);
+        border-top: 1px solid var(--outline);
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 8px 4px;
+        border-radius: var(--radius);
+        transition: color 0.2s;
+      }
+      .nav-item.active {
+        color: var(--coral);
+      }
+      .nav-item.active .nav-pill {
+        background: #ffecea;
+        padding: 4px 16px;
+        border-radius: var(--radius-full);
+      }
+      .nav-item svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      /* ─── MAIN WRAPPER ─── */
+      main {
+        padding-bottom: 88px;
+      }
+
+      /* ═══════════════════════════════
+     HOME PAGE
+  ═══════════════════════════════ */
+      .hero {
+        margin: 16px;
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        min-height: 460px;
+        display: flex;
+        align-items: flex-end;
+        background: linear-gradient(
+          135deg,
+          var(--coral) 0%,
+          var(--coral-light) 100%
+        );
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        mix-blend-mode: overlay;
+        opacity: 0.55;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 32px 28px;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--yellow);
+        color: var(--yellow-dark);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: var(--radius-full);
+        margin-bottom: 16px;
+      }
+      .hero h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.8rem;
+        line-height: 1.1;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 12px;
+      }
+      .hero h2 em {
+        font-style: italic;
+      }
+      .hero p {
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        max-width: 340px;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        color: var(--coral);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 14px 24px;
+        border-radius: var(--radius-full);
+        border: none;
+        cursor: pointer;
+        box-shadow: var(--shadow-md);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+      .btn-primary:active {
+        transform: scale(0.97);
+      }
+      .btn-primary svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s;
+      }
+      .btn-primary:hover svg {
+        transform: translateX(3px);
+      }
+
+      .section-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text);
+        padding: 0 20px;
+        margin: 32px 0 16px;
+      }
+      .section-title span {
+        color: var(--coral);
+        font-style: italic;
+      }
+
+      /* Categories strip */
+      .categories {
+        display: flex;
+        gap: 12px;
+        padding: 0 20px 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .categories::-webkit-scrollbar {
+        display: none;
+      }
+      .cat-card {
+        position: relative;
+        flex: 0 0 140px;
+        height: 160px;
+        border-radius: var(--radius);
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .cat-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+      }
+      .cat-card:hover img {
+        transform: scale(1.08);
+      }
+      .cat-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.55) 0%,
+          transparent 60%
+        );
+        display: flex;
+        align-items: flex-end;
+        padding: 12px;
+      }
+      .cat-label {
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      /* Stats strip */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin: 16px;
+      }
+      .stat-card {
+        background: var(--surface-card);
+        border-radius: var(--radius);
+        padding: 16px 12px;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--outline);
+      }
+      .stat-num {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: var(--coral);
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+
+      /* ═══════════════════════════════
+     SHOP PAGE
+  ═══════════════════════════════ */
+      .shop-header {
+        padding: 24px 20px 8px;
+      }
+      .shop-header h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .shop-header h1 em {
+        color: var(--coral);
+        font-style: italic;
+      }
+      .shop-header p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      /* Filter chips */
+      .filter-bar {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .chip {
+        flex: 0 0 auto;
+        padding: 7px 16px;
+        border-radius: var(--radius-full);
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid var(--outline);
+        background: var(--surface-card);
+        color: var(--text-muted);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .chip.active,
+      .chip:hover {
+        background: var(--coral);
+        color: #fff;
+        border-color: var(--coral);
+      }
+
+      /* Product grid */
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 16px;
+      }
+      @media (min-width: 600px) {
+        .product-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (min-width: 900px) {
+        .product-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .product-card {
+        background: var(--surface-card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--outline);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        cursor: pointer;
+      }
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+      }
+      .product-img-wrap {
+        position: relative;
+        aspect-ratio: 3/4;
+        overflow: hidden;
+        background: var(--surface-low);
+      }
+      .product-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.45s;
+      }
+      .product-card:hover .product-img-wrap img {
+        transform: scale(1.06);
+      }
+      .product-badge {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        background: var(--teal-light);
+        color: #fff;
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: var(--radius-sm);
+      }
+      .product-badge.sold {
+        background: #888;
+      }
+      .product-badge.new {
+        background: var(--yellow-dark);
+      }
+      .fav-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-full);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(6px);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--coral);
+        font-size: 1rem;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .fav-btn:hover {
+        background: #fff;
+        transform: scale(1.1);
+      }
+      .fav-btn.active svg {
+        fill: var(--coral);
+      }
+      .product-info {
+        padding: 10px 12px 14px;
+      }
+      .product-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .product-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .product-price {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--coral);
+      }
+      .product-size {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* No results */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+      }
+      .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 12px;
+        opacity: 0.3;
+      }
+      .empty-state p {
+        font-size: 0.95rem;
+      }
+
+      /* Load more */
+      .load-more-wrap {
+        text-align: center;
+        padding: 32px 20px;
+      }
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        color: var(--teal);
+        border: 2px solid var(--teal);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 13px 32px;
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-outline:hover {
+        background: var(--teal);
+        color: #fff;
+      }
+
+      /* ═══════════════════════════════
+     CONTACTS PAGE
+  ═══════════════════════════════ */
+      .contacts-header {
+        background: linear-gradient(135deg, var(--coral) 0%, #c44438 100%);
+        padding: 40px 24px 48px;
+        position: relative;
+        overflow: hidden;
+      }
+      .contacts-header::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 50%;
+      }
+      .contacts-header::after {
+        content: "";
+        position: absolute;
+        bottom: -60px;
+        left: -30px;
+        width: 180px;
+        height: 180px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 50%;
+      }
+      .contacts-header .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: var(--radius-full);
+        margin-bottom: 16px;
+      }
+      .contacts-header h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 12px;
+      }
+      .contacts-header p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .contacts-body {
+        padding: 0 16px 16px;
+      }
+
+      /* Steps */
+      .steps-card {
+        background: var(--surface-card);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        margin-top: -24px;
+        position: relative;
+        z-index: 2;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--outline);
+        margin-bottom: 16px;
+      }
+      .steps-card h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text);
+      }
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .step {
+        display: flex;
+        gap: 16px;
+      }
+      .step-num {
+        flex: 0 0 36px;
+        height: 36px;
+        border-radius: var(--radius-full);
+        background: var(--coral-pale);
+        color: var(--coral);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1rem;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step-text h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .step-text p {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      /* Social links */
+      .social-card {
+        background: var(--coral);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-md);
+      }
+      .social-card h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 6px;
+      }
+      .social-card p {
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .social-link {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: var(--radius-sm);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #fff;
+        transition: background 0.2s;
+      }
+      .social-link:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+      .social-icon {
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--coral);
+        flex: 0 0 40px;
+      }
+      .social-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+      .social-info {
+        flex: 1;
+      }
+      .social-info strong {
+        display: block;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .social-info span {
+        font-size: 0.72rem;
+        opacity: 0.75;
+        letter-spacing: 0.04em;
+      }
+
+      /* Pickup locations */
+      .pickup-card {
+        background: var(--surface-card);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        border: 1px solid var(--outline);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 16px;
+      }
+      .pickup-card h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .pickup-card > p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .pickup-item {
+        display: flex;
+        gap: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--outline);
+      }
+      .pickup-item:last-child {
+        border: none;
+        padding-bottom: 0;
+      }
+      .pickup-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        background: var(--coral-pale);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--coral);
+      }
+      .pickup-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .pickup-item h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .pickup-item p {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      /* Tip */
+      .tip-card {
+        background: #fffbea;
+        border: 1px solid var(--yellow);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .tip-card svg {
+        flex: 0 0 20px;
+        width: 20px;
+        height: 20px;
+        color: var(--yellow-dark);
+        margin-top: 2px;
+      }
+      .tip-card p {
+        font-size: 0.82rem;
+        color: var(--yellow-dark);
+        line-height: 1.6;
+        font-weight: 500;
+      }
+
+      /* CTA */
+      .cta-card {
+        background: var(--surface-low);
+        border-radius: var(--radius);
+        padding: 32px 20px;
+        text-align: center;
+        border: 1px solid var(--outline);
+        margin-bottom: 8px;
+      }
+      .cta-card h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .cta-card p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .btn-coral {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--coral);
+        color: #fff;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 13px 28px;
+        border-radius: var(--radius-full);
+        border: none;
+        cursor: pointer;
+        box-shadow: var(--shadow-md);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .btn-coral:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+      .btn-coral svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ─── MODAL ─── */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(6px);
+        align-items: flex-end;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal {
+        background: var(--surface-card);
+        border-radius: 24px 24px 0 0;
+        width: 100%;
+        max-height: 90dvh;
+        overflow-y: auto;
+        padding: 24px 20px 40px;
+        animation: slideUp 0.3s ease;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: none;
+        }
+      }
+      .modal-handle {
+        width: 40px;
+        height: 4px;
+        border-radius: 99px;
+        background: var(--outline);
+        margin: 0 auto 20px;
+      }
+      .modal-img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        border-radius: var(--radius);
+        margin-bottom: 20px;
+        background: var(--surface-low);
+      }
+      .modal-badge-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .modal-badge {
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: var(--radius-full);
+      }
+      .modal-badge.condition {
+        background: #e0f7f4;
+        color: var(--teal);
+      }
+      .modal-badge.category {
+        background: var(--coral-pale);
+        color: var(--coral);
+      }
+      .modal h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .modal-price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .modal-price {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--coral);
+      }
+      .modal-size {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        background: var(--surface-low);
+        padding: 3px 10px;
+        border-radius: var(--radius-full);
+      }
+      .modal-desc {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--outline);
+      }
+      .modal-details {
+        margin-bottom: 28px;
+      }
+      .modal-detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--outline);
+        font-size: 0.85rem;
+      }
+      .modal-detail-row:last-child {
+        border: none;
+      }
+      .modal-detail-label {
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+      .modal-detail-val {
+        font-weight: 600;
+        color: var(--text);
+      }
+      .modal-cta {
+        display: flex;
+        gap: 10px;
+      }
+      .modal-cta .btn-coral {
+        flex: 1;
+        justify-content: center;
+      }
+      .modal-cta .btn-outline-sm {
+        padding: 13px 16px;
+        border-radius: var(--radius-full);
+        background: none;
+        border: 2px solid var(--outline);
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .modal-cta .btn-outline-sm:hover {
+        border-color: var(--coral);
+        color: var(--coral);
+      }
+
+      /* ─── SEARCH OVERLAY ─── */
+      .search-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(249, 247, 245, 0.97);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+      }
+      .search-overlay.open {
+        display: flex;
+      }
+      .search-bar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .search-input {
+        flex: 1;
+        padding: 14px 18px;
+        border-radius: var(--radius-full);
+        border: 2px solid var(--outline);
+        background: var(--surface-card);
+        font-family: "DM Sans", sans-serif;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .search-input:focus {
+        border-color: var(--coral);
+      }
+      .search-close {
+        padding: 0 20px;
+        border-radius: var(--radius-full);
+        background: none;
+        border: 2px solid var(--outline);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text-muted);
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+      .search-close:hover {
+        border-color: var(--coral);
+        color: var(--coral);
+      }
+      .search-results {
+        overflow-y: auto;
+      }
+      .search-empty {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+      }
+
+      /* ─── TOAST ─── */
+      .toast {
+        position: fixed;
+        bottom: 88px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: var(--text);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: var(--radius-full);
+        font-size: 0.82rem;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.25s;
+        z-index: 300;
+        white-space: nowrap;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (min-width: 768px) {
+        header {
+          padding: 0 40px;
+        }
+        .hero {
+          margin: 20px;
+          min-height: 520px;
+        }
+        nav.bottom {
+          display: none;
+        }
+        /* Desktop nav in header */
+        .desktop-nav {
+          display: flex !important;
+          gap: 8px;
+        }
+        main {
+          padding-bottom: 20px;
+        }
+        .contacts-body {
+          max-width: 700px;
+          margin: 0 auto;
+        }
+      }
+      .desktop-nav {
+        display: none;
+      }
+      .desktop-nav button {
+        padding: 8px 18px;
+        border-radius: var(--radius-full);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: all 0.2s;
+      }
+      .desktop-nav button.active {
+        color: var(--coral);
+        background: var(--coral-pale);
+      }
+      .desktop-nav button:hover {
+        color: var(--coral);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ HEADER ══ -->
+    <header>
+      <div
+        class="logo"
+        onclick="showPage('home')"
+        style="display: flex; align-items: center; gap: 10px"
+      >
+        <img src="capovolto.png" alt="Capovolto" /><span>Capovolto</span>
+      </div>
+      <div class="header-actions">
+        <div class="desktop-nav" id="desktopNav">
+          <button onclick="showPage('home')" id="dn-home" class="active">
+            Home
+          </button>
+          <button onclick="showPage('shop')" id="dn-shop">Shop</button>
+          <button onclick="showPage('contacts')" id="dn-contacts">
+            Contatti
+          </button>
+        </div>
+        <button class="icon-btn" onclick="openSearch()" aria-label="Cerca">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- ══════════════════════════
+     PAGE: HOME
+══════════════════════════ -->
+      <div class="page active" id="page-home">
+        <!-- Hero -->
+        <section class="hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M17 8C8 10 5.9 16.17 3.82 22c2.29-.93 4.92-2.15 7.18-4C12 16 13 13 17 8z"
+                />
+                <path d="M17 8c0 0 1-3 4-3-1 4-2 6-5 8l1-5z" />
+              </svg>
+              Sostenibilità &amp; Stile
+            </div>
+            <h2>Dai nuova <em>vita</em> allo stile</h2>
+            <p>
+              Scopri capi vintage e pre-loved curati con amore, per un
+              guardaroba unico e consapevole.
+            </p>
+            <button class="btn-primary" onclick="showPage('shop')">
+              Esplora il Catalogo
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Stats -->
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-items">0</div>
+            <div class="stat-label">Capi disponibili</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">♻️</div>
+            <div class="stat-label">Moda circolare</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">🤝</div>
+            <div class="stat-label">Consegna a mano</div>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <h2 class="section-title">Sfoglia per <span>categoria</span></h2>
+        <div class="categories" id="home-categories"></div>
+
+        <!-- Featured items -->
+        <h2 class="section-title">Ultimi <span>arrivi</span></h2>
+        <div
+          class="product-grid"
+          id="home-featured"
+          style="margin-bottom: 16px"
+        ></div>
+      </div>
+
+      <!-- ══════════════════════════
+     PAGE: SHOP
+══════════════════════════ -->
+      <div class="page" id="page-shop">
+        <div class="shop-header">
+          <h1>Il nostro <em>catalogo</em></h1>
+          <p>Ogni capo ha una storia da raccontare.</p>
+        </div>
+        <div class="filter-bar" id="filterBar">
+          <div class="chip active" data-filter="all">Tutti</div>
+        </div>
+        <div class="product-grid" id="shopGrid"></div>
+        <div class="empty-state" id="shopEmpty" style="display: none">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            />
+          </svg>
+          <p>Nessun capo trovato in questa categoria.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════
+     PAGE: CONTACTS
+══════════════════════════ -->
+      <div class="page" id="page-contacts">
+        <div class="contacts-header">
+          <div class="badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17 8C8 10 5.9 16.17 3.82 22c2.29-.93 4.92-2.15 7.18-4C12 16 13 13 17 8z"
+              />
+              <path d="M17 8c0 0 1-3 4-3-1 4-2 6-5 8l1-5z" />
+            </svg>
+            Sostenibilità &amp; Community
+          </div>
+          <h1>Contatti &amp; Ritiro</h1>
+          <p>
+            Crediamo nel valore delle relazioni. Preferiamo la consegna a mano:
+            meno imballaggi, zero emissioni di spedizione e una chiacchierata
+            tra amanti del vintage.
+          </p>
+        </div>
+
+        <div class="contacts-body">
+          <!-- Steps -->
+          <div class="steps-card">
+            <h2>Come funziona</h2>
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                  <h3>Scegli il tuo tesoro</h3>
+                  <p>
+                    Sfoglia lo shop e trova quel pezzo unico che ti fa battere
+                    il cuore.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                  <h3>Scrivimi in Direct</h3>
+                  <p>
+                    Contattami via Instagram o WhatsApp per confermare la
+                    disponibilità del capo.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                  <h3>Ritiro a mano</h3>
+                  <p>
+                    Ci incontriamo in centro per lo scambio. Semplice, umano,
+                    green.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social -->
+          <div class="social-card">
+            <h2>Contattami</h2>
+            <p>
+              Hai dubbi su taglie o materiali? Scrivimi, ti risponderò al più
+              presto!
+            </p>
+            <a
+              class="social-link"
+              href="https://wa.me/NUMEROQUI"
+              target="_blank"
+            >
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
+                  />
+                </svg>
+              </div>
+              <div class="social-info">
+                <strong>WhatsApp</strong>
+                <span>MESSAGGIO RAPIDO</span>
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(255,255,255,.5)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </a>
+            <a
+              class="social-link"
+              href="https://instagram.com/preloved_with_love"
+              target="_blank"
+            >
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  />
+                </svg>
+              </div>
+              <div class="social-info">
+                <strong>Instagram</strong>
+                <span>@PRELOVED_WITH_LOVE</span>
+              </div>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(255,255,255,.5)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Pickup -->
+          <div class="pickup-card">
+            <h2>Punti di ritiro</h2>
+            <p>Scambio i capi in zone centrali, facilmente raggiungibili.</p>
+            <div class="pickup-item">
+              <div class="pickup-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <h4>Piazza del Duomo</h4>
+                <p>
+                  Sotto i portici, lato Nord. Comodo per chi viene in metro.
+                </p>
+              </div>
+            </div>
+            <div class="pickup-item">
+              <div class="pickup-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"
+                  />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <h4>Giardini Pubblici</h4>
+                <p>
+                  Ingresso principale, zona fontana. Ideale per una passeggiata.
+                </p>
+              </div>
+            </div>
+            <div class="pickup-item">
+              <div class="pickup-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <div>
+                <h4>Orari</h4>
+                <p>Su appuntamento, Lunedì–Sabato pomeriggio.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tip -->
+          <div class="tip-card">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              />
+            </svg>
+            <p>
+              Ogni capo ha una storia. Aiutaci a scrivere il prossimo capitolo
+              con una scelta sostenibile.
+            </p>
+          </div>
+
+          <!-- CTA -->
+          <div class="cta-card">
+            <h3>Pronta per il tuo prossimo acquisto?</h3>
+            <p>Esplora la collezione e trova il tuo pezzo del cuore.</p>
+            <button class="btn-coral" onclick="showPage('shop')">
+              Vai allo Shop
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ══ BOTTOM NAV ══ -->
+    <nav class="bottom">
+      <button class="nav-item active" id="bn-home" onclick="showPage('home')">
+        <div class="nav-pill">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        Home
+      </button>
+      <button class="nav-item" id="bn-shop" onclick="showPage('shop')">
+        <div class="nav-pill">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>
+        </div>
+        Shop
+      </button>
+      <button class="nav-item" id="bn-contacts" onclick="showPage('contacts')">
+        <div class="nav-pill">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            />
+          </svg>
+        </div>
+        Contatti
+      </button>
+    </nav>
+
+    <!-- ══ PRODUCT MODAL ══ -->
+    <div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+      <div class="modal" id="modalContent">
+        <div class="modal-handle"></div>
+        <img class="modal-img" id="modalImg" src="" alt="" />
+        <div class="modal-badge-row">
+          <span class="modal-badge condition" id="modalCondition"></span>
+          <span class="modal-badge category" id="modalCategory"></span>
+        </div>
+        <h2 id="modalName"></h2>
+        <div class="modal-price-row">
+          <span class="modal-price" id="modalPrice"></span>
+          <span class="modal-size" id="modalSizeTag"></span>
+        </div>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="modal-details" id="modalDetails"></div>
+        <div class="modal-cta">
+          <button class="btn-coral" id="modalWA">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"
+              />
+            </svg>
+            Sono interessata
+          </button>
+          <button class="btn-outline-sm" onclick="closeModalDirect()">
+            Chiudi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SEARCH OVERLAY ══ -->
+    <div class="search-overlay" id="searchOverlay">
+      <div class="search-bar">
+        <input
+          class="search-input"
+          id="searchInput"
+          type="text"
+          placeholder="Cerca un capo..."
+          oninput="doSearch(this.value)"
+        />
+        <button class="search-close" onclick="closeSearch()">Chiudi</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-empty">Inizia a digitare per cercare...</div>
+      </div>
+    </div>
+
+    <!-- ══ TOAST ══ -->
+    <div class="toast" id="toast"></div>
+
+    <script src="catalogo.js"></script>
+    <script>
+      // ═══════════════════════════════════════
+      //  NAVIGATION
+      // ═══════════════════════════════════════
+      let currentPage = "home";
+
+      function showPage(name) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + name).classList.add("active");
+
+        // Bottom nav
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById("bn-" + name).classList.add("active");
+
+        // Desktop nav
+        document
+          .querySelectorAll(".desktop-nav button")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById("dn-" + name).classList.add("active");
+
+        currentPage = name;
+        window.scrollTo(0, 0);
+
+        if (name === "shop") renderShop();
+        if (name === "home") renderHome();
+      }
+
+      // ═══════════════════════════════════════
+      //  RENDER HOME
+      // ═══════════════════════════════════════
+      function renderHome() {
+        // Stat
+        const available = CATALOG.filter((i) => !i.sold).length;
+        document.getElementById("stat-items").textContent = available;
+
+        // Categories
+        const cats = [...new Set(CATALOG.map((i) => i.category))];
+        const catIcons = { default: "👗" };
+        const catContainer = document.getElementById("home-categories");
+        catContainer.innerHTML = cats
+          .map((cat) => {
+            // find first item in this category for thumbnail
+            const item = CATALOG.find((i) => i.category === cat);
+            const img =
+              item && item.image
+                ? `<img src="${item.image}" alt="${cat}" loading="lazy"/>`
+                : "";
+            return `<div class="cat-card" onclick="filterAndGo('${cat}')">
+      ${img}
+      <div class="cat-overlay"><span class="cat-label">${cat}</span></div>
+    </div>`;
+          })
+          .join("");
+
+        // Featured: last 4 not sold
+        const featured = CATALOG.filter((i) => !i.sold)
+          .slice(-4)
+          .reverse();
+        document.getElementById("home-featured").innerHTML = featured
+          .map((item) => cardHTML(item))
+          .join("");
+      }
+
+      function filterAndGo(cat) {
+        activeFilter = cat;
+        showPage("shop");
+      }
+
+      // ═══════════════════════════════════════
+      //  RENDER SHOP
+      // ═══════════════════════════════════════
+      let activeFilter = "all";
+
+      function renderShop() {
+        // Build filter chips
+        const cats = ["all", ...new Set(CATALOG.map((i) => i.category))];
+        document.getElementById("filterBar").innerHTML = cats
+          .map(
+            (c) =>
+              `<div class="chip${activeFilter === c ? " active" : ""}" data-filter="${c}" onclick="setFilter('${c}')">${c === "all" ? "Tutti" : c}</div>`,
+          )
+          .join("");
+
+        // Filter items
+        const items =
+          activeFilter === "all"
+            ? CATALOG
+            : CATALOG.filter((i) => i.category === activeFilter);
+        const grid = document.getElementById("shopGrid");
+        grid.innerHTML = items.map((item) => cardHTML(item)).join("");
+        document.getElementById("shopEmpty").style.display =
+          items.length === 0 ? "block" : "none";
+      }
+
+      function setFilter(f) {
+        activeFilter = f;
+        renderShop();
+      }
+
+      // ═══════════════════════════════════════
+      //  CARD HTML
+      // ═══════════════════════════════════════
+      function cardHTML(item) {
+        const badgeText = item.sold
+          ? "Venduto"
+          : item.new
+            ? "Nuovo arrivo"
+            : item.condition;
+        const badgeClass = item.sold ? "sold" : item.new ? "new" : "";
+        const imgSrc = item.image || "";
+        const imgTag = imgSrc
+          ? `<img src="${imgSrc}" alt="${item.name}" loading="lazy"/>`
+          : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:2rem;">👗</div>`;
+
+        return `<article class="product-card${item.sold ? " sold-item" : ""}" onclick="openModal(${item.id})">
+    <div class="product-img-wrap">
+      ${imgTag}
+      <span class="product-badge ${badgeClass}">${badgeText}</span>
+      <button class="fav-btn${isFav(item.id) ? " active" : ""}" onclick="toggleFav(event,${item.id})" aria-label="Salva">
+        <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="${isFav(item.id) ? "currentColor" : "none"}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+    <div class="product-info">
+      <div class="product-name">${item.name}</div>
+      <div class="product-meta">
+        <span class="product-price">€ ${item.price.toFixed(2).replace(".", ",")}</span>
+        <span class="product-size">${item.size}</span>
+      </div>
+    </div>
+  </article>`;
+      }
+
+      // ═══════════════════════════════════════
+      //  FAVORITES (localStorage)
+      // ═══════════════════════════════════════
+      function getFavs() {
+        try {
+          return JSON.parse(localStorage.getItem("plwl_favs") || "[]");
+        } catch {
+          return [];
+        }
+      }
+      function isFav(id) {
+        return getFavs().includes(id);
+      }
+      function toggleFav(e, id) {
+        e.stopPropagation();
+        let favs = getFavs();
+        if (favs.includes(id)) {
+          favs = favs.filter((f) => f !== id);
+          showToast("Rimosso dai salvati");
+        } else {
+          favs.push(id);
+          showToast("Aggiunto ai salvati ♥");
+        }
+        localStorage.setItem("plwl_favs", JSON.stringify(favs));
+        // re-render current page
+        if (currentPage === "shop") renderShop();
+        if (currentPage === "home") renderHome();
+      }
+
+      // ═══════════════════════════════════════
+      //  PRODUCT MODAL
+      // ═══════════════════════════════════════
+      // WhatsApp number — change this!
+      const WA_NUMBER = "NUMEROQUI";
+      const IG_HANDLE = "preloved_with_love";
+
+      function openModal(id) {
+        const item = CATALOG.find((i) => i.id === id);
+        if (!item) return;
+
+        document.getElementById("modalImg").src = item.image || "";
+        document.getElementById("modalImg").alt = item.name;
+        document.getElementById("modalCondition").textContent = item.condition;
+        document.getElementById("modalCategory").textContent = item.category;
+        document.getElementById("modalName").textContent = item.name;
+        document.getElementById("modalPrice").textContent =
+          "€ " + item.price.toFixed(2).replace(".", ",");
+        document.getElementById("modalSizeTag").textContent =
+          "Taglia: " + item.size;
+        document.getElementById("modalDesc").textContent =
+          item.description ||
+          "Un capo unico e originale, curato con attenzione.";
+
+        // Details table
+        const details = [
+          ["Taglia", item.size],
+          ["Condizione", item.condition],
+          ["Categoria", item.category],
+          ...(item.brand ? [["Brand", item.brand]] : []),
+          ...(item.color ? [["Colore", item.color]] : []),
+          ["Stato", item.sold ? "Venduto" : "Disponibile"],
+        ];
+        document.getElementById("modalDetails").innerHTML = details
+          .map(
+            ([l, v]) =>
+              `<div class="modal-detail-row"><span class="modal-detail-label">${l}</span><span class="modal-detail-val">${v}</span></div>`,
+          )
+          .join("");
+
+        // WA message
+        const msg = encodeURIComponent(
+          `Ciao! Sono interessata al capo "${item.name}" (Taglia ${item.size}, € ${item.price.toFixed(2)}) che ho visto sul sito. È ancora disponibile?`,
+        );
+        document.getElementById("modalWA").onclick = () => {
+          window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
+        };
+
+        document.getElementById("productModal").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(e) {
+        if (e.target === document.getElementById("productModal"))
+          closeModalDirect();
+      }
+      function closeModalDirect() {
+        document.getElementById("productModal").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      // ═══════════════════════════════════════
+      //  SEARCH
+      // ═══════════════════════════════════════
+      function openSearch() {
+        document.getElementById("searchOverlay").classList.add("open");
+        setTimeout(() => document.getElementById("searchInput").focus(), 100);
+        document.body.style.overflow = "hidden";
+      }
+      function closeSearch() {
+        document.getElementById("searchOverlay").classList.remove("open");
+        document.getElementById("searchInput").value = "";
+        document.getElementById("searchResults").innerHTML =
+          '<div class="search-empty">Inizia a digitare per cercare...</div>';
+        document.body.style.overflow = "";
+      }
+      function doSearch(q) {
+        if (!q.trim()) {
+          document.getElementById("searchResults").innerHTML =
+            '<div class="search-empty">Inizia a digitare per cercare...</div>';
+          return;
+        }
+        const results = CATALOG.filter(
+          (i) =>
+            i.name.toLowerCase().includes(q.toLowerCase()) ||
+            i.category.toLowerCase().includes(q.toLowerCase()) ||
+            (i.brand && i.brand.toLowerCase().includes(q.toLowerCase())) ||
+            (i.description &&
+              i.description.toLowerCase().includes(q.toLowerCase())),
+        );
+        if (!results.length) {
+          document.getElementById("searchResults").innerHTML =
+            '<div class="search-empty">Nessun risultato per "' + q + '"</div>';
+          return;
+        }
+        document.getElementById("searchResults").innerHTML =
+          `<div class="product-grid" style="padding:0;">${results.map(cardHTML).join("")}</div>`;
+      }
+
+      // ═══════════════════════════════════════
+      //  TOAST
+      // ═══════════════════════════════════════
+      let toastTimer;
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+      }
+
+      // ═══════════════════════════════════════
+      //  INIT
+      // ═══════════════════════════════════════
+      renderHome();
+    </script>
+  </body>
+</html>
